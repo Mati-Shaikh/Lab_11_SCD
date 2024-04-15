@@ -3,6 +3,9 @@ pipeline {
 
     stages {
         stage('Checkout') {
+            when{
+                branch 'main'
+            }
            
             steps {
                 git url: 'https://github.com/Mati-Shaikh/Lab_11_SCD.git'
