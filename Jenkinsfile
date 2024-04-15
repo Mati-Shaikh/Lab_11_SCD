@@ -1,30 +1,43 @@
 pipeline {
     agent any
-
+    environment {
+        DOCKER_IMAGE = 'username/mywebapp:latest'
+    }
     stages {
         stage('Checkout') {
             steps {
-                // Checkout your code from Git repository
-                git credentialsId: 'My-credentials', url: 'https://github.com/Mati-Shaikh/Lab_11_SCD'
+                git credentialsId: 'your-credentials-id', url: 'https://github.com/Mati-Shaikh/Lab_11_SCD'
             }
         }
-
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
         stage('Build Docker Image') {
             steps {
-                // Build Docker image using Dockerfile in the project directory
-                script {
-                    docker.build('my-react-app-image:latest')  // Replace 'my-react-app' with your desired image name
-                }
+                sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
-
-        stage('Run Docker Container') {
+        stage('Run Docker Image') {
             steps {
-                // Run Docker container from the built image
+                sh 'docker run -d -p 80:80 $DOCKER_IMAGE'
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
                 script {
-                    docker.run('-p 3000:3000 --name my-container my-react-app-image:latest') // Replace 'my-react-app' with your image name
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
+                        sh 'docker push $DOCKER_IMAGE'
+                    }
                 }
             }
         }
     }
+    post {
+        always {
+            sh 'echo "Pipeline execution is completed"'
+        }
+    }
 }
+
