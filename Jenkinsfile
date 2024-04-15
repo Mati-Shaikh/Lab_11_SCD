@@ -1,52 +1,35 @@
-pipeline {
+ipeline {
+
     agent any
 
+   
     stages {
-        stage('Checkout') {
-            when{
-                branch 'main'
+         stage('dependencies') {
+          steps {
+              sh 'npm install'
             }
-           
+          }
+
+        stage('build') {
             steps {
-                git url: 'https://github.com/Mati-Shaikh/Lab_11_SCD.git'
+                sh 'npm run build'
             }
         }
-
-        stage('Install Dependencies') {
-          
+       
+        stage('Docker Image') {
             steps {
-                sh 'npm install'
+               
+                    sh "echo docker_build_-t_SCD-Lab11"
+               
             }
         }
-
-        stage('Build Docker Image') {
-        
+       
+        stage('Docker Comopse Up') {
             steps {
-                script {
-                    docker.build('lab-11-scd:latest') 
-                }
-            }
-        }
-
-        stage('Run Docker Container') {
-           
-            steps {
-                script {
-                    docker.run('-p 3000:3000 --name lab-11-container lab-11-scd:latest')
-                }
-            }
-        }
-
-        stage('Push Docker Image (Optional)') {
-           
-            steps {
-                script {
-                    docker.withRegistry('https://registry.example.com', 'docker-hub-credentials') {
-                        docker.image('lab-11-scd:latest').push('latest')
-                    }
-                }
+               
+                    sh "echo sudo-docker-compose-up"
+               
             }
         }
     }
 }
-
