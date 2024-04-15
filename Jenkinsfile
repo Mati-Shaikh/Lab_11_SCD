@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout your code from Git repository
-                git 'https://github.com/Mati-Shaikh/Lab_11_SCD'
+                git 'https://github.com/Mati-Shaikh/Lab_11_SCD.git'
             }
         }
 
