@@ -1,35 +1,37 @@
-ipeline {
-
+pipeline {
     agent any
-
-   
     stages {
-         stage('dependencies') {
-          steps {
-              sh 'npm install'
+        stage('Checkout') {
+            steps {
+                sh 'echo Checkout passed'
             }
-          }
+        }
 
-        stage('build') {
+        stage('Install Dependencies') {
             steps {
-                sh 'npm run build'
+                sh 'npm install'
             }
         }
+
        
-        stage('Docker Image') {
+
+        stage('Build Docker Image') {
             steps {
-               
-                    sh "echo docker_build_-t_SCD-Lab11"
-               
+                sh 'echo docker build -t myapp:latest .'
             }
         }
-       
-        stage('Docker Comopse Up') {
+
+        stage('Run Docker Image') {
             steps {
-               
-                    sh "echo sudo-docker-compose-up"
-               
+                sh 'echo docker run -d -p 80:80 myapp:latest'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                sh 'echo docker push UmairAhmed/Lab11:latest'
+                }
             }
         }
     }
-}
+
