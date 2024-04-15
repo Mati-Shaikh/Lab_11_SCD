@@ -5,7 +5,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout your code from Git repository
-                git 'https://github.com/aditya-sridhar/simple-reactjs-app.git'
+                git 'https://github.com/Mati-Shaikh/Lab_11_SCD'
             }
         }
 
@@ -13,7 +13,7 @@ pipeline {
             steps {
                 // Build Docker image using Dockerfile in the project directory
                 script {
-                    docker.build('my-react-app:latest')  // Replace 'my-react-app' with your desired image name
+                    docker.build('my-react-app-image:latest')  // Replace 'my-react-app' with your desired image name
                 }
             }
         }
@@ -22,7 +22,7 @@ pipeline {
             steps {
                 // Run Docker container from the built image
                 script {
-                    docker.run('-p 3000:3000 --name my-container my-react-app:latest') // Replace 'my-react-app' with your image name
+                    docker.run('-p 3000:3000 --name my-container my-react-app-image:latest') // Replace 'my-react-app' with your image name
                 }
             }
         }
